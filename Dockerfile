@@ -1,16 +1,17 @@
 # 使用官方构建好的完整镜像作为基础
 FROM privoce/vocechat-server:latest
 
-# 安装 rclone 及其依赖
+# 安装 rclone 及其依赖，现在加入了 unzip
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         fuse3 \
-        curl && \
+        curl \
+        unzip && \
     curl https://rclone.org/install.sh | sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 将我们本地的配置文件和启动脚本复制到镜像中的/app目录
+# 将我们本地的配置文件和启动脚本复制到镜像中
 COPY rclone.conf /app/rclone.conf
 COPY start.sh /app/start.sh
 
