@@ -1,15 +1,13 @@
-# 使用官方构建好的完整镜像作为基础
+# 使用官方构建好的Vocechat镜像作为基础
 FROM privoce/vocechat-server:latest
 
-# 安装 rclone 及其依赖，现在加入了 unzip
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# 使用apk（Alpine Linux的包管理器）来安装rclone的依赖
+# --no-cache 标志可以保持镜像体积小，等同于apt-get clean的效果
+RUN apk add --no-cache \
         fuse3 \
         curl \
         unzip && \
-    curl https://rclone.org/install.sh | sh && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    curl https://rclone.org/install.sh | sh
 
 # 将我们本地的配置文件和启动脚本复制到镜像中
 COPY rclone.conf /app/rclone.conf
