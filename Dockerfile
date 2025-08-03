@@ -2,10 +2,12 @@
 FROM privoce/vocechat-server:latest
 
 # 使用apk（Alpine Linux的包管理器）来安装rclone的依赖
-# --no-cache 标志可以保持镜像体积小，等同于apt-get clean的效果
+# --no-cache 标志可以保持镜像体积小
+# 新增了 bash，因为rclone安装脚本内部可能需要它
 RUN apk add --no-cache \
-        fuse3 \
+        bash \
         curl \
+        fuse3 \
         unzip && \
     curl https://rclone.org/install.sh | sh
 
