@@ -8,7 +8,6 @@ FROM privoce/vocechat-server:latest AS extractor
 FROM debian:bullseye-slim
 
 # 在我们自己的系统里，使用 apt-get 安装所有需要的依赖
-# 注意：我们回到了 apt-get，因为我们的基础镜像是 debian
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         bash \
@@ -20,7 +19,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # 【关键步骤】从第一阶段(extractor)中，将Vocechat的程序文件复制到我们当前的系统中
-COPY --from=extractor /usr/local/bin/vocechat-server /usr/local/bin/vocechat-server
+# 源镜像中的正确路径是 /vocechat-server
+COPY --from=extractor /vocechat-server /usr/local/bin/vocechat-server
 
 # 将我们本地的配置文件和启动脚本复制到镜像中
 COPY rclone.conf /app/rclone.conf
